@@ -14,13 +14,13 @@
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>portable</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>$(KSPDEVDIR)\GameData\Trajectories\Plugin\</OutputPath>
+    <OutputPath>G:\Steam\steamapps\common\Kerbal Space Program\GameData\Trajectories\Plugin\</OutputPath>
     <DefineConstants>TRACE;DEBUG;DEVELOPMENT;ENABLE_PROFILER;DEBUG_PROFILER</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -34,11 +34,13 @@
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>x64</PlatformTarget>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>$(KSPDEVDIR)\GameData\Trajectories\Plugin\</OutputPath>
+    <OutputPath>G:\Steam\steamapps\common\Kerbal Space Program\GameData\Trajectories\Plugin\</OutputPath>
     <DefineConstants>
     </DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -55,6 +57,8 @@
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>x64</PlatformTarget>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug 1.7|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -131,48 +135,6 @@
     <Prefer32Bit>false</Prefer32Bit>
     <PlatformTarget>x64</PlatformTarget>
   </PropertyGroup>
-  <ItemGroup Condition="'$(Configuration)'=='Release' Or '$(Configuration)'=='Debug'">
-    <Reference Include="Assembly-CSharp">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="Assembly-CSharp-firstpass">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.AnimationModule">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.CoreModule">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.ImageConversionModule">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.IMGUIModule">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.InputLegacyModule">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.PhysicsModule">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.TextRenderingModule">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>$(KSPDEVDIR)\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-  </ItemGroup>
   <ItemGroup Condition="'$(Configuration)'=='Release 1.7' Or '$(Configuration)'=='Debug 1.7'">
     <Reference Include="Assembly-CSharp">
       <HintPath>$(KSPBACKPORTDIR17)\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
@@ -180,10 +142,6 @@
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(KSPBACKPORTDIR17)\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>$(KSPBACKPORTDIR17)\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="UnityEngine.UI">
@@ -200,16 +158,21 @@
       <HintPath>$(KSPBACKPORTDIR)\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="UnityEngine">
-      <HintPath>$(KSPBACKPORTDIR)\KSP_x64_Data\Managed\UnityEngine.dll</HintPath>
-      <Private>False</Private>
-    </Reference>
     <Reference Include="UnityEngine.UI">
       <HintPath>$(KSPBACKPORTDIR)\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp-firstpass">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\Assembly-CSharp-firstpass.dll</HintPath>
+    </Reference>
+    <Reference Include="KRPC">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\GameData\kRPC\KRPC.dll</HintPath>
+    </Reference>
     <Reference Include="System">
       <Private>False</Private>
     </Reference>
@@ -227,6 +190,30 @@
     </Reference>
     <Reference Include="System.Xml">
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine.AnimationModule">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.AnimationModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.ImageConversionModule">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.ImageConversionModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.IMGUIModule">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.InputLegacyModule">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.InputLegacyModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.PhysicsModule">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.PhysicsModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.UI">
+      <HintPath>..\..\..\..\..\..\Shortcuts\Steam\Kerbal Space Program\KSP_x64_Data\Managed\UnityEngine.UI.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -272,10 +259,6 @@
   </PostBuildEventDependsOn>
     <PostBuildEvent>if "$(ConfigurationName)"=="Debug" (call "$(ProjectDir)..\..\buildscripts\UnityDebug\prepare-debug.bat" $(TargetName) 19)
 if "$(ConfigurationName)"=="Release" (call "$(ProjectDir)..\..\buildscripts\ZipPack\build-package.bat" $(TargetName) -v@(VersionNumber) 19)
-if "$(ConfigurationName)"=="Debug 1.7" (call "$(ProjectDir)..\..\buildscripts\UnityDebug\prepare-debug.bat" $(TargetName) 17)
-if "$(ConfigurationName)"=="Release 1.7" (call "$(ProjectDir)..\..\buildscripts\ZipPack\build-package.bat" $(TargetName) -v@(VersionNumber) 17)
-if "$(ConfigurationName)"=="Debug 1.3" (call "$(ProjectDir)..\..\buildscripts\UnityDebug\prepare-debug.bat" $(TargetName) 13)
-if "$(ConfigurationName)"=="Release 1.3" (call "$(ProjectDir)..\..\buildscripts\ZipPack\build-package.bat" $(TargetName) -v@(VersionNumber) 13)
 echo Copying local repository Localization files to $(TargetDir)Localization
 xcopy /E /D /Y "$(ProjectDir)..\..\GameData\Trajectories\Localization" "$(TargetDir)..\Localization\"
 </PostBuildEvent>

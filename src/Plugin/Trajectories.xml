@@ -1,0 +1,780 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Trajectories</name>
+    </assembly>
+    <members>
+        <member name="T:Trajectories.ToolbarManager">
+            <summary>
+            The global tool bar manager.
+            </summary>
+        </member>
+        <member name="P:Trajectories.ToolbarManager.ToolbarAvailable">
+            <summary>
+            Whether the Toolbar Plugin is available.
+            </summary>
+        </member>
+        <member name="P:Trajectories.ToolbarManager.Instance">
+            <summary>
+            The global tool bar manager instance.
+            </summary>
+        </member>
+        <member name="T:Trajectories.IToolbarManager">
+            <summary>
+            A toolbar manager.
+            </summary>
+        </member>
+        <member name="M:Trajectories.IToolbarManager.add(System.String,System.String)">
+            <summary>
+            Adds a new button.
+            </summary>
+            <remarks>
+            To replace an existing button, just add a new button using the old button's namespace and ID.
+            Note that the new button will inherit the screen position of the old button.
+            </remarks>
+            <param name="ns">The new button's namespace. This is usually the plugin's name. Must not include special characters like '.'</param>
+            <param name="id">The new button's ID. This ID must be unique across all buttons in the namespace. Must not include special characters like '.'</param>
+            <returns>The button created.</returns>
+        </member>
+        <member name="T:Trajectories.IButton">
+            <summary>
+            Represents a clickable button.
+            </summary>
+        </member>
+        <member name="P:Trajectories.IButton.Text">
+            <summary>
+            The text displayed on the button. Set to null to hide text.
+            </summary>
+            <remarks>
+            The text can be changed at any time to modify the button's appearance. Note that since this will also
+            modify the button's size, this feature should be used sparingly, if at all.
+            </remarks>
+            <seealso cref="P:Trajectories.IButton.TexturePath"/>
+        </member>
+        <member name="P:Trajectories.IButton.TextColor">
+            <summary>
+            The color the button text is displayed with. Defaults to Color.white.
+            </summary>
+            <remarks>
+            The text color can be changed at any time to modify the button's appearance.
+            </remarks>
+        </member>
+        <member name="P:Trajectories.IButton.TexturePath">
+            <summary>
+            The path of a texture file to display an icon on the button. Set to null to hide icon.
+            </summary>
+            <remarks>
+            <para>
+            A texture path on a button will have precedence over text. That is, if both text and texture path
+            have been set on a button, the button will show the texture, not the text.
+            </para>
+            <para>
+            The texture size must not exceed 24x24 pixels.
+            </para>
+            <para>
+            The texture path must be relative to the "GameData" directory, and must not specify a file name suffix.
+            Valid example: MyAddon/Textures/icon_mybutton
+            </para>
+            <para>
+            The texture path can be changed at any time to modify the button's appearance.
+            </para>
+            </remarks>
+            <seealso cref="P:Trajectories.IButton.Text"/>
+        </member>
+        <member name="P:Trajectories.IButton.ToolTip">
+            <summary>
+            The button's tool tip text. Set to null if no tool tip is desired.
+            </summary>
+            <remarks>
+            Tool Tip Text Should Always Use Headline Style Like This.
+            </remarks>
+        </member>
+        <member name="P:Trajectories.IButton.Visible">
+            <summary>
+            Whether this button is currently visible or not. Can be used in addition to or as a replacement for <see cref="P:Trajectories.IButton.Visibility"/>.
+            </summary>
+            <remarks>
+            Setting this property to true does not affect the player's ability to hide the button using the configuration.
+            Conversely, setting this property to false does not enable the player to show the button using the configuration.
+            </remarks>
+        </member>
+        <member name="P:Trajectories.IButton.Visibility">
+            <summary>
+            Determines this button's visibility. Can be used in addition to or as a replacement for <see cref="P:Trajectories.IButton.Visible"/>.
+            </summary>
+            <remarks>
+            The return value from IVisibility.Visible is subject to the same rules as outlined for
+            <see cref="P:Trajectories.IButton.Visible"/>.
+            </remarks>
+        </member>
+        <member name="P:Trajectories.IButton.EffectivelyVisible">
+            <summary>
+            Whether this button is currently effectively visible or not. This is a combination of
+            <see cref="P:Trajectories.IButton.Visible"/> and <see cref="P:Trajectories.IButton.Visibility"/>.
+            </summary>
+            <remarks>
+            Note that the toolbar is not visible in certain game scenes, for example the loading screens. This property
+            does not reflect button invisibility in those scenes. In addition, this property does not reflect the
+            player's configuration of the button's visibility.
+            </remarks>
+        </member>
+        <member name="P:Trajectories.IButton.Enabled">
+            <summary>
+            Whether this button is currently enabled (clickable) or not. This does not affect the player's ability to
+            position the button on their toolbar.
+            </summary>
+        </member>
+        <member name="P:Trajectories.IButton.Important">
+            <summary>
+            Whether this button is currently "important." Set to false to return to normal button behaviour.
+            </summary>
+            <remarks>
+            <para>
+            This can be used to temporarily force the button to be shown on screen regardless of the toolbar being
+            currently in auto-hidden mode. For example, a button that signals the arrival of a private message in
+            a chat room could mark itself as "important" as long as the message has not been read.
+            </para>
+            <para>
+            Setting this property does not change the appearance of the button. Use <see cref="P:Trajectories.IButton.TexturePath"/> to
+            change the button's icon.
+            </para>
+            <para>
+            Setting this property to true does not affect the player's ability to hide the button using the
+            configuration.
+            </para>
+            <para>
+            This feature should be used only sparingly, if at all, since it forces the button to be displayed on
+            screen even when it normally wouldn't.
+            </para>
+            </remarks>
+        </member>
+        <member name="P:Trajectories.IButton.Drawable">
+            <summary>
+            A drawable that is tied to the current button. This can be anything from a popup menu to
+            an informational window. Set to null to hide the drawable.
+            </summary>
+        </member>
+        <member name="E:Trajectories.IButton.OnClick">
+            <summary>
+            Event handler that can be registered with to receive "on click" events.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.OnClick += (e) => {
+                Debug.Log("button clicked, mouseButton: " + e.MouseButton);
+            };
+            </code>
+            </example>
+        </member>
+        <member name="E:Trajectories.IButton.OnMouseEnter">
+            <summary>
+            Event handler that can be registered with to receive "on mouse enter" events.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.OnMouseEnter += (e) => {
+                Debug.Log("mouse entered button");
+            };
+            </code>
+            </example>
+        </member>
+        <member name="E:Trajectories.IButton.OnMouseLeave">
+            <summary>
+            Event handler that can be registered with to receive "on mouse leave" events.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.OnMouseLeave += (e) => {
+                Debug.Log("mouse left button");
+            };
+            </code>
+            </example>
+        </member>
+        <member name="M:Trajectories.IButton.Destroy">
+            <summary>
+            Permanently destroys this button so that it is no longer displayed.
+            Should be used when a plugin is stopped to remove leftover buttons.
+            </summary>
+        </member>
+        <member name="T:Trajectories.IDrawable">
+            <summary>
+            A drawable that is tied to a particular button. This can be anything from a popup menu
+            to an informational window.
+            </summary>
+        </member>
+        <member name="M:Trajectories.IDrawable.Update">
+            <summary>
+            Update any information. This is called once per frame.
+            </summary>
+        </member>
+        <member name="M:Trajectories.IDrawable.Draw(UnityEngine.Vector2)">
+            <summary>
+            Draws GUI widgets for this drawable. This is the equivalent to the OnGUI() message in
+            <see cref="T:UnityEngine.MonoBehaviour"/>.
+            </summary>
+            <remarks>
+            The drawable will be positioned near its parent toolbar according to the drawable's current
+            width/height.
+            </remarks>
+            <param name="position">The left/top position of where to draw this drawable.</param>
+            <returns>The current width/height of this drawable.</returns>
+        </member>
+        <member name="T:Trajectories.ClickEvent">
+            <summary>
+            Event describing a click on a button.
+            </summary>
+        </member>
+        <member name="F:Trajectories.ClickEvent.Button">
+            <summary>
+            The button that has been clicked.
+            </summary>
+        </member>
+        <member name="F:Trajectories.ClickEvent.MouseButton">
+            <summary>
+            The mouse button which the button was clicked with.
+            </summary>
+            <remarks>
+            Is 0 for left mouse button, 1 for right mouse button, and 2 for middle mouse button.
+            </remarks>
+        </member>
+        <member name="T:Trajectories.ClickHandler">
+            <summary>
+            An event handler that is invoked whenever a button has been clicked.
+            </summary>
+            <param name="e">An event describing the button click.</param>
+        </member>
+        <member name="T:Trajectories.MouseMoveEvent">
+            <summary>
+            Event describing the mouse pointer moving about a button.
+            </summary>
+        </member>
+        <member name="F:Trajectories.MouseMoveEvent.button">
+            <summary>
+            The button in question.
+            </summary>
+        </member>
+        <member name="T:Trajectories.MouseEnterEvent">
+            <summary>
+            Event describing the mouse pointer entering a button's area.
+            </summary>
+        </member>
+        <member name="T:Trajectories.MouseLeaveEvent">
+            <summary>
+            Event describing the mouse pointer leaving a button's area.
+            </summary>
+        </member>
+        <member name="T:Trajectories.MouseEnterHandler">
+            <summary>
+            An event handler that is invoked whenever the mouse pointer enters a button's area.
+            </summary>
+            <param name="e">An event describing the mouse pointer entering.</param>
+        </member>
+        <member name="T:Trajectories.MouseLeaveHandler">
+            <summary>
+            An event handler that is invoked whenever the mouse pointer leaves a button's area.
+            </summary>
+            <param name="e">An event describing the mouse pointer leaving.</param>
+        </member>
+        <member name="T:Trajectories.IVisibility">
+            <summary>
+            Determines visibility of a button.
+            </summary>
+            <seealso cref="P:Trajectories.IButton.Visibility"/>
+        </member>
+        <member name="P:Trajectories.IVisibility.Visible">
+            <summary>
+            Whether a button is currently visible or not.
+            </summary>
+            <seealso cref="P:Trajectories.IButton.Visible"/>
+        </member>
+        <member name="T:Trajectories.GameScenesVisibility">
+            <summary>
+            Determines visibility of a button in relation to the currently running game scene.
+            </summary>
+            <example>
+            <code>
+            IButton button = ...
+            button.Visibility = new GameScenesVisibility(GameScenes.EDITOR, GameScenes.FLIGHT);
+            </code>
+            </example>
+            <seealso cref="P:Trajectories.IButton.Visibility"/>
+        </member>
+        <member name="T:Trajectories.PopupMenuDrawable">
+            <summary>
+            A drawable that draws a popup menu.
+            </summary>
+        </member>
+        <member name="E:Trajectories.PopupMenuDrawable.OnAnyOptionClicked">
+            <summary>
+            Event handler that can be registered with to receive "any menu option clicked" events.
+            </summary>
+        </member>
+        <member name="M:Trajectories.PopupMenuDrawable.AddOption(System.String)">
+            <summary>
+            Adds a new option to the popup menu.
+            </summary>
+            <param name="text">The text of the option.</param>
+            <returns>A button that can be used to register clicks on the menu option.</returns>
+        </member>
+        <member name="M:Trajectories.PopupMenuDrawable.AddSeparator">
+            <summary>
+            Adds a separator to the popup menu.
+            </summary>
+        </member>
+        <member name="M:Trajectories.PopupMenuDrawable.Destroy">
+            <summary>
+            Destroys this drawable. This must always be called before disposing of this drawable.
+            </summary>
+        </member>
+        <member name="T:Trajectories.API">
+            <summary>
+            API for Trajectories. Note: this API only returns correct values for the "active vessel".
+            </summary>
+        </member>
+        <member name="P:Trajectories.API.GetVersion">
+            <summary>
+            Returns the version number of trajectories in a string formated as Major.Minor.Patch i.e. 2.1.0
+            </summary>
+        </member>
+        <member name="P:Trajectories.API.GetVersionMajor">
+            <summary>
+            Returns the major version number of trajectories
+            </summary>
+        </member>
+        <member name="P:Trajectories.API.GetVersionMinor">
+            <summary>
+            Returns the minor version number of trajectories
+            </summary>
+        </member>
+        <member name="P:Trajectories.API.GetVersionPatch">
+            <summary>
+            Returns the patch version number of trajectories
+            </summary>
+        </member>
+        <member name="P:Trajectories.API.AlwaysUpdate">
+            <summary>
+            Modifies the AlwaysUpdate value in the settings page.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.GetEndTime">
+            <summary>
+            Returns trajectory patch EndTime or Null if no active vessel or calculated trajectory.
+            See GetTimeTillImpact for remaining time until impact.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.GetTimeTillImpact">
+            <summary>
+            Returns the remaining time until Impact in seconds or Null if no active vessel or calculated trajectory.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.GetImpactPosition">
+            <summary>
+            Returns the calculated impact position of the trajectory or Null if no active vessel or calculated trajectory.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.GetImpactLatLong">
+            <summary>
+            Returns the calculated impact position of the trajectory in lat and long.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.GetImpactVelocity">
+            <summary>
+            Returns the calculated impact velocity of the trajectory or Null if no active vessel or calculated trajectory.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.GetSpaceOrbit">
+            <summary>
+            Returns the space orbit of the calculated trajectory or Null if orbit is atmospheric or there is no active vessel or calculated trajectory.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.PlannedDirection">
+            <summary>
+            Returns the planned direction or Null if no active vessel or set target.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.CorrectedDirection">
+            <summary>
+            Returns the corrected direction or Null if no active vessel or set target.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.HasTarget">
+            <summary>
+            Returns true if a target has been set, false if not, or Null if no active vessel.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.SetTarget(System.Double,System.Double,System.Nullable{System.Double})">
+            <summary>
+            Set the trajectories target to a latitude, longitude and altitude at the HomeWorld.
+            </summary>
+        </member>
+        <member name="P:Trajectories.API.ProgradeEntry">
+            <summary>
+            Set the trajectories descent profile to Prograde.
+            </summary>
+        </member>
+        <member name="P:Trajectories.API.RetrogradeEntry">
+            <summary>
+            Set the trajectories descent profile to Prograde.
+            </summary>
+        </member>
+        <member name="M:Trajectories.API.UpdateTrajectory">
+            <summary>
+            Triggers a recalculation of the trajectory.
+            </summary>
+        </member>
+        <member name="T:Trajectories.AppLauncherButton">
+            <summary>
+            Handles the creation, destroying etc of an App start button for either KSP's stock toolbar or Blizzy's toolbar.
+            </summary>
+        </member>
+        <member name="T:Trajectories.AppLauncherButton.IconStyleType">
+            <summary> Toolbar button icon style</summary>
+        </member>
+        <member name="P:Trajectories.AppLauncherButton.IconStyle">
+            <summary> Current style of the toolbar button icon </summary>
+        </member>
+        <member name="M:Trajectories.AppLauncherButton.Create">
+            <summary> Creates the toolbar button for either a KSP stock toolbar or Blizzy toolbar if available. </summary>
+        </member>
+        <member name="M:Trajectories.AppLauncherButton.Destroy">
+            <summary> Destroys the toolbar button if it exists. </summary>
+        </member>
+        <member name="M:Trajectories.AppLauncherButton.ChangeIcon(Trajectories.AppLauncherButton.IconStyleType)">
+            <summary> Changes the toolbar button icon </summary>
+        </member>
+        <member name="T:Trajectories.Profiler">
+            <summary> Simple profiler for measuring the execution time of code placed between the Start and Stop methods. </summary>
+        </member>
+        <member name="M:Trajectories.DescentProfile.GetAngleOfAttack(CelestialBody,Vector3d,Vector3d)">
+            <summary>
+            Computes the angle of attack to follow the current profile if the aircraft is at the specified position
+            (in world frame, but relative to the body) with the specified velocity
+            (relative to the air, so it takes the body rotation into account)
+            </summary>
+        </member>
+        <member name="T:Trajectories.MainGUI">
+            <summary> MainGUI window handler. </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.Allocate">
+            <summary>
+            Allocates any classes, variables etc needed for the MainGUI,
+              note that this method should be called from the constructor.
+            </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.OnPopupDialogDestroy">
+            <summary>
+            Called when the PopupDialog OnDestroy method is called. Used for saving the MainGUI window position.
+            </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.SetDataFieldJustification">
+            <summary>
+            Sets the justification of the data field labels
+            </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.SetManualTargetTextBoxEvents">
+            <summary>
+            Creates the event listeners for the manual target text input box
+            </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.KeyboardLockout(System.String)">
+            <summary>
+            Locks out the keyboards input
+            </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.KeyboardUnlock(System.String)">
+            <summary>
+            Removes the keyboard lockout
+            </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.SetIntegratorSlider">
+            <summary>
+            Sets the logarithmic slider position for the plug-in setting IntegrationStepSize
+            </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.Show">
+            <summary> Shows window. </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.Hide">
+            <summary> Hides window. </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.ChangePage(Trajectories.MainGUI.PageType)">
+            <summary> Changes the page inside the page box. </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.UpdatePages">
+            <summary> Updates the strings used by the Gui components to display changing values/data </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.UpdateInfoPage">
+            <summary> Updates the strings used by the info page to display changing values/data </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.UpdateTargetPage">
+            <summary> Updates the strings used by the target page to display changing values/data </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.UpdateSettingsPage">
+            <summary> Updates the strings used by the settings page to display changing values/data </summary>
+        </member>
+        <member name="M:Trajectories.MainGUI.UpdateTargetDistance">
+            <summary> Updates the strings used by the info and target page to display target distance </summary>
+        </member>
+        <member name="M:Trajectories.MapGUI.IsValidScene">
+            <summary>
+            Determines if the current game scane is valid for the plugin.
+            This plugin should be able to run in VAB/SPH, Flight, Space Center, and Tracking Station scenes.
+            </summary>
+            <returns>True if valid; false if not valid.</returns>
+        </member>
+        <member name="T:Trajectories.MapOverlay">
+            <summary>
+            Trajectory map view overlay handler
+            </summary>
+        </member>
+        <member name="T:Trajectories.MapOverlay.MapTrajectoryRenderer">
+            <summary>
+            Trajectory map view renderer
+            </summary>
+        </member>
+        <member name="M:Trajectories.MapOverlay.MapTrajectoryRenderer.Visible(System.Boolean)">
+            <summary>
+            Shows or hides the rendered trajectory on the map view
+            </summary>
+        </member>
+        <member name="M:Trajectories.MapOverlay.GetMesh">
+            <summary>
+            Returns first found Non-Active mesh, if none are found then adds a new mesh to the end of the list.
+            </summary>
+        </member>
+        <member name="M:Trajectories.StockAeroUtil.GetTemperature(Vector3d,CelestialBody)">
+            <summary>
+            This function should return exactly the same value as Vessel.atmDensity, but is more generic because you don't need an actual vessel updated by KSP to get a value at the desired location.
+            Computations are performed for the current body position, which means it's theoritically wrong if you want to know the temperature in the future, but since body rotation is not used (position is given in sun frame), you should get accurate results up to a few weeks.
+            </summary>
+            <param name="position"></param>
+            <param name="body"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Trajectories.StockAeroUtil.GetDensity(System.Double,CelestialBody)">
+            <summary>
+            Gets the air density (rho) for the specified altitude on the specified body.
+            This is an approximation, because actual calculations, taking sun exposure into account to compute air temperature, require to know the actual point on the body where the density is to be computed (knowing the altitude is not enough).
+            However, the difference is small for high altitudes, so it makes very little difference for trajectory prediction.
+            </summary>
+            <param name="altitude">Altitude above sea level (in meters)</param>
+            <param name="body"></param>
+            <returns></returns>
+        </member>
+        <member name="T:Trajectories.Trajectory">
+            <summary>
+            Handles trajectory prediction, performing a lightweight physical simulation to
+            predict a vessels trajectory in space and atmosphere.
+            </summary>
+        </member>
+        <member name="F:Trajectories.Trajectory.Point.groundAltitude">
+            <summary>
+            Ground altitude above (or under) sea level, in meters.
+            </summary>
+        </member>
+        <member name="F:Trajectories.Trajectory.Point.time">
+            <summary>
+            Universal time
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.Target.HasTarget">
+            <summary>
+            Tests if the target has been set.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Trajectories.Trajectory.Target.Body">
+            <summary>
+            Targets reference body
+            </summary>
+        </member>
+        <member name="P:Trajectories.Trajectory.Target.WorldPosition">
+            <summary>
+            Targets position in WorldSpace
+            </summary>
+        </member>
+        <member name="P:Trajectories.Trajectory.Target.LocalPosition">
+            <summary>
+            Targets position in LocalSpace relative to the target body
+            </summary>
+        </member>
+        <member name="P:Trajectories.Trajectory.Target.ManualText">
+            <summary>
+            Manual target TextBox string
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.Target.SetFromWorldPos(CelestialBody,Vector3d)">
+            <summary>
+            Sets the target to a body and a World position
+            Saves the target to the active vessel.
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.Target.SetFromLocalPos(CelestialBody,Vector3d)">
+            <summary>
+            Sets the target to a body and a body-relative position
+            Saves the target to the active vessel.
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.Target.SetFromLatLonAlt(CelestialBody,System.Double,System.Double,System.Nullable{System.Double})">
+            <summary>
+            Sets the target to a body and a World position. If the altitude is not given, it will be calculated as the surface altitude at that latitude/longitude.
+            Saves the target to the active vessel.
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.Target.Clear">
+            <summary>
+            Clears the target
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.Target.Save">
+            <summary>
+            Saves the target to the active vessel module
+            </summary>
+        </member>
+        <member name="F:Trajectories.Trajectory.frameTime_">
+            <summary>
+            Trajectory calculation time in last frame
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.GetGroundAltitude(CelestialBody,UnityEngine.Vector3)">
+            <summary>
+            relativePosition is in world frame, but relative to the body (i.e. inertial body space)
+            returns the altitude above sea level (can be negative for bodies without ocean)
+            </summary>
+        </member>
+        <member name="M:Trajectories.Trajectory.VerletStep(Trajectories.Trajectory.SimulationState,System.Func{Vector3d,Vector3d,Vector3d},System.Double,Vector3d@)">
+            <summary>
+            Integration step function for Verlet integration
+            </summary>
+            <param name="state">Position+Velocity of the current time step</param>
+            <param name="accelerationFunc">Functor that returns the acceleration for a given Position+Velocity</param>
+            <param name="dt">Time step interval</param>
+            <param name="accel">Stores the value of the accelerationFunc at the current time step</param>
+            <returns></returns>
+        </member>
+        <member name="M:Trajectories.Trajectory.RK4Step(Trajectories.Trajectory.SimulationState,System.Func{Vector3d,Vector3d,Vector3d},System.Double,Vector3d@)">
+            <summary>
+            Integration step function for Runge-Kutta 4 integration
+            </summary>
+            <param name="state">Position+Velocity of the current time step</param>
+            <param name="accelerationFunc">Functor that returns the acceleration for a given Position+Velocity</param>
+            <param name="dt">Time step interval</param>
+            <param name="accel">Stores the value of the accelerationFunc at the current time step</param>
+            <returns></returns>
+        </member>
+        <member name="M:Trajectories.Util.Log(System.String,System.Object[])">
+            <summary> writes a message to the log </summary>
+        </member>
+        <member name="M:Trajectories.Util.DebugLog(System.String,System.Object[])">
+            <summary> writes a debug message to the log with stack trace info added </summary>
+        </member>
+        <member name="M:Trajectories.Util.DebugLogWarning(System.String,System.Object[])">
+            <summary> writes a debug warning message to the log with stack trace info added </summary>
+        </member>
+        <member name="M:Trajectories.Util.DebugLogError(System.String,System.Object[])">
+            <summary> writes a debug error message to the log with stack trace info added </summary>
+        </member>
+        <member name="P:Trajectories.Util.HoursInDay">
+            <summary> Return hours in a KSP day. </summary>
+        </member>
+        <member name="P:Trajectories.Util.DaysInYear">
+            <summary> Return days in a KSP year. </summary>
+        </member>
+        <member name="P:Trajectories.Util.Clocks">
+            <summary> Get current time in clocks. </summary>
+        </member>
+        <member name="M:Trajectories.Util.Microseconds(System.Double)">
+            <summary> Convert from clocks to microseconds. </summary>
+        </member>
+        <member name="M:Trajectories.Util.Milliseconds(System.Double)">
+            <summary> Convert from clocks to milliseconds. </summary>
+        </member>
+        <member name="M:Trajectories.Util.Seconds(System.Double)">
+            <summary> Convert from clocks to seconds. </summary>
+        </member>
+        <member name="P:Trajectories.Util.IsFlight">
+            <summary> Returns true if the current scene is flight. </summary>
+        </member>
+        <member name="P:Trajectories.Util.IsEditor">
+            <summary> Returns true if the current scene is editor. </summary>
+        </member>
+        <member name="P:Trajectories.Util.IsGame">
+            <summary> Returns true if the current scene is not the main menu. </summary>
+        </member>
+        <member name="P:Trajectories.Util.IsTrackingStation">
+            <summary> Returns true if the current scene is tracking station. </summary>
+        </member>
+        <member name="P:Trajectories.Util.IsMap">
+            <summary> Returns true if the current view is map. </summary>
+        </member>
+        <member name="P:Trajectories.Util.IsPaused">
+            <summary> Returns true if game is paused. </summary>
+        </member>
+        <member name="P:Trajectories.Util.IsPatchedConicsAvailable">
+            <summary> Check if patched conics are available in the current save. </summary>
+            <returns>True if patched conics are available</returns>
+        </member>
+        <member name="F:Trajectories.Util.rng">
+            <summary> Random number generator. </summary>
+        </member>
+        <member name="M:Trajectories.Util.RandomInt(System.Int32)">
+            <summary> Returns random integer in [0..max_value] range. </summary>
+        </member>
+        <member name="M:Trajectories.Util.RandomFloat">
+            <summary> Returns random float in [0..1] range. </summary>
+        </member>
+        <member name="M:Trajectories.Util.RandomDouble">
+            <summary> Returns random double in [0..1] range. </summary>
+        </member>
+        <member name="M:Trajectories.Util.FastRandomFloat">
+            <summary> Returns random float in [-1,+1] range.
+            Note: it is less random than the c# RNG, but is way faster. </summary>
+        </member>
+        <member name="M:Trajectories.Util.DistanceFromLatitudeAndLongitude(System.Double,System.Double,System.Double,System.Double,System.Double)">
+             <summary>
+             Calculate the shortest great-circle distance between two points on a sphere which are given by latitude and longitude.
+            
+            
+             https://en.wikipedia.org/wiki/Haversine_formula
+             </summary>
+             <param name="bodyRadius"></param> Radius of the sphere in meters
+             <param name="originLatidue"></param>Latitude of the origin of the distance
+             <param name="originLongitude"></param>Longitude of the origin of the distance
+             <param name="destinationLatitude"></param>Latitude of the destination of the distance
+             <param name="destinationLongitude"></param>Longitude of the destination of the distance
+             <returns>Distance between origin and source in meters</returns>
+        </member>
+        <member name="M:Trajectories.VesselAerodynamicModel.GetForces(CelestialBody,Vector3d,Vector3d,System.Double)">
+            <summary>
+            Returns the total aerodynamic forces that would be applied on the vessel if it was at bodySpacePosition with bodySpaceVelocity relatively to the specified celestial body
+            This method makes use of the cache if available, otherwise it will call ComputeForces.
+            </summary>
+        </member>
+        <member name="M:Trajectories.VesselAerodynamicModel.ComputeForces(System.Double,Vector3d,Vector3d,System.Double)">
+            <summary>
+            Compute the aerodynamic forces that would be applied to the vessel if it was in the specified situation (air velocity, altitude and angle of attack).
+            </summary>
+            <returns>The computed aerodynamic forces in world space</returns>
+        </member>
+        <member name="M:Trajectories.VesselAerodynamicModel.ComputeForces_Model(Vector3d,System.Double)">
+            <summary>
+            Computes the aerodynamic forces that would be applied to the vessel if it was in the specified situation (air velocity and altitude). The vessel is assumed to be in its current orientation (the air velocity is already adjusted as needed).
+            </summary>
+            <returns>The computed aerodynamic forces in world space</returns>
+        </member>
+        <member name="M:Trajectories.VesselAerodynamicModel.PackForces(Vector3d,System.Double,System.Double)">
+            <summary>
+            Aerodynamic forces are roughly proportional to rho and squared air velocity, so we divide by these values to get something that can be linearly interpolated (the reverse operation is then applied after interpolation)
+            This operation is optional but should slightly increase the cache accuracy
+            </summary>
+        </member>
+        <member name="M:Trajectories.VesselAerodynamicModel.UnpackForces(UnityEngine.Vector2,System.Double,System.Double)">
+            <summary>
+            See PackForces
+            </summary>
+        </member>
+    </members>
+</doc>
